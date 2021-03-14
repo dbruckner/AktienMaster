@@ -9,88 +9,151 @@
 #define PRIME 1009;
 
 
-std::string hashtable[1009];
+Aktie* hashtable[1009];
 
 
 
 int power(int base, int exponent) {
-    if (exponent == 0) {
-        return 1;
-    }
-    return base * power(base, exponent - 1);
+	if (exponent == 0) {
+		return 1;
+	}
+	return base * power(base, exponent - 1);
 }
 
 int hashFunc(std::string str, int n) {
-    
-    int sum = 0;
 
-    for (int i = n - 1; i > 0; i--) {
-        sum = (sum + str[n - i - 1] * power(31, i)) % PRIME;
-    }
+	int sum = 0;
 
-    return sum;
+	for (int i = n - 1; i > 0; i--) {
+		sum = (sum + str[n - i - 1] * power(31, i)) % PRIME;
+	}
+
+	return sum;
 }
 
-void fillhashtable(int arr) {
-    std::string word = "";
+int fillhashtable(std::string name) {
+	std::string word = name;
 
+	int pos = hashFunc(word, word.length());
+	if (hashtable[pos] != nullptr) {
+		int counter = 1;
+		while (1) {
+			pos += (counter * counter);
+			pos %= PRIME;
 
-    for (int i = 0; i < 1009; i++) {
-        hashtable[i] = "no";
-    }
+			if (hashtable[pos] == nullptr) {
+				break;
+			}
+			counter++;
+		}
+	}
+	return pos;
 
+}
 
-    for (int i = 0; i < arr; i++) {
-        for (int j = 0; j < 4; j++) {
-            int random = rand() % 26 + 97;
-            char letter = char(random);
-            word.push_back(letter);
-        }
+void addAktie() {
+	std::string name = " ";
+	int WKN = 0;
+	std::string abb = " ";
 
-        int pos = hashFunc(word, word.length());
-        if (hashtable[pos] != "no") {
-            int counter = 1;
-            while (1) {
-                pos += (counter * counter);
-                pos %= PRIME;
-                
-                if (hashtable[pos] == "no") {
-                    break;
-                }
-                counter++;
-            }
-        }
-        hashtable[pos] = word;
-        word = "";
-    }
+	std::cout << "Geben Sie bitte den Namen der Firma an: ";
+	std::cin >> name;
+	while (1) {
+		if (!cin) {
+			std::cout << "Bitte geben Sie nur Buchstaben an: ";
+			std::cin >> name;
+		}
+		else {
+			break;
+		}
+	}
+
+	std::cout << "Geben Sie bitte nun die WKN an:";
+	std::cin >> WKN;
+	while (1) {
+		if (!cin) {
+			std::cout << "Bitte geben Sie nur Zahlen an: ";
+			std::cin >> WKN;
+		}
+		else {
+			break;
+		}
+	}
+	std::cout << "Geben Sie nun bitte zuletzt die abb der von Ihnen ausgewählten Firma an: ";
+	std::cin >> abb;
+	while (1) {
+		if (!cin) {
+			std::cout << "Bitte geben Sie nur Buchstaben an: ";
+			std::cin >> abb;
+		}
+		else {
+			break;
+		}
+	}
+
+	Aktie* aktie = new Aktie(name, to_string(WKN), abb);
+	hashtable[fillhashtable(name)] = aktie;
+
 }
 
 
 
 int main() {
-    time_t t;
-    srand((unsigned)time(&t));
-    
-    fillhashtable(1009);
-    int counter = 0;
-    for (int i = 0; i < 1009; i++) {
-        if (hashtable[i] != "no") {
-            counter++;
-            std::cout << counter << ".) Slot " << i << " is " << hashtable[i] << std::endl;
-        }
-    }
 
-    /* TEST FOR CLASS
-    Aktie test("TEST", "123", "TST");
+	for (int i = 0; i < 1009; i++) {
+		hashtable[i] = nullptr;
+	}
+	time_t t;
+	srand((unsigned)time(&t));
 
-    test.addValue(high, 5.1);
+	std::cout << "Willkommen im Aktienmaster Ihr persöhnliches Aktien Tool!" << std::endl;
+	int userinput;
 
-    test.printVector(high);
+	while (1) {
+		std::cout << "Was wollen sie tun?" << std::endl << "(1) neue Aktien hinzufügen (2) einen Index suchen (3+) in Progress..: ";
+		std::cin >> userinput;
+		if (userinput == 1) {
+			addAktie();
+		}
+		else if(userinput == 2) {
+			searchAktie();
+		}
+		else {
+			std::cout << "Bitte geben Sie einen der angeführten Nummern ein" << std::endl;
+		}
+	}
 
-    test.printAktie();
-    */
+
+	//fillhashtable(1009);
 
 
-    //std::cout << hashFunc(key, key.length());
+
+
+
+	/*
+	for (int i = 0; i < 1009; i++) {
+		if (hashtable[i] != "no") {
+			counter++;
+			std::cout << counter << ".) Slot " << i << " is " << hashtable[i] << std::endl;
+		}
+	}
+
+
+
+
+
+
+
+	Aktie test("TEST", "123", "TST");
+
+	test.addValue(high, 5.1);
+
+	test.printVector(high);
+
+	test.printAktie();
+	*/
+
+
+	//std::cout << hashFunc(key, key.length());
 
 }
