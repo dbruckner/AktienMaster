@@ -3,6 +3,7 @@
 #include <string>
 #include <string.h>
 #include <time.h>
+#include "type.h"
 
 #define PRIME 1009;
 
