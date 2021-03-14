@@ -78,6 +78,16 @@ int main() {
         }
     }
 
+    /* TEST FOR CLASS
+    Aktie test("TEST", "123", "TST");
+
+    test.addValue(high, 5.1);
+
+    test.printVector(high);
+
+    test.printAktie();
+    */
+
 
     //std::cout << hashFunc(key, key.length());
 
