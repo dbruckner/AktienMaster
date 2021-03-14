@@ -4,6 +4,7 @@
 #include <string.h>
 #include <time.h>
 #include "type.h"
+#include "aktie.h"
 
 #define PRIME 1009;
 
