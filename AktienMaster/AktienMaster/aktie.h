@@ -14,6 +14,7 @@ class Aktie {
         void printVector(int type);
         void addValue(int type, float value);
 
+        std::string getName();
 
     private:
         string name;

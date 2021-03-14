@@ -31,10 +31,11 @@ int hashFunc(std::string str, int n) {
 	return sum;
 }
 
-int fillhashtable(std::string name) {
+int calculatePos(std::string name) {
 	std::string word = name;
 
 	int pos = hashFunc(word, word.length());
+	pos %= PRIME;
 	if (hashtable[pos] != nullptr) {
 		int counter = 1;
 		while (1) {
@@ -44,12 +45,47 @@ int fillhashtable(std::string name) {
 			if (hashtable[pos] == nullptr) {
 				break;
 			}
+			
 			counter++;
 		}
 	}
 	return pos;
 
 }
+
+int searchPos(std::string name) {
+	std::string word = name;
+	int pos = hashFunc(word, word.length());
+	pos %= PRIME;
+	int counter = 1;
+	if (hashtable[pos] != nullptr && hashtable[pos]->getName() == word) {
+		return pos;
+	}else {
+		while (1) {
+			pos += (counter * counter);
+			pos %= PRIME;
+			if (hashtable[pos] != nullptr || hashtable[pos]->getName() == word) {
+				return pos;
+			}
+			else if (counter == 1000) {
+				return -1;
+			}
+			
+		}
+	}
+
+}
+
+
+int searchAktie() {
+	std::string userinput = " ";
+
+	std::cout << "Geben Sie den Namen der Aktie ein die Sie suchen: ";
+	std::cin >> userinput;
+
+	return searchPos(userinput);
+}
+
 
 void addAktie() {
 	std::string name = " ";
@@ -92,7 +128,7 @@ void addAktie() {
 	}
 
 	Aktie* aktie = new Aktie(name, to_string(WKN), abb);
-	hashtable[fillhashtable(name)] = aktie;
+	hashtable[calculatePos(name)] = aktie;
 
 }
 
@@ -116,7 +152,13 @@ int main() {
 			addAktie();
 		}
 		else if(userinput == 2) {
-			searchAktie();
+			int pos = searchAktie();
+			if (pos != -1) {
+				hashtable[pos]->printAktie();
+			}
+			else {
+				std::cout << "Aktie kann nicht gefunden werden" << std::endl;
+			}
 		}
 		else {
 			std::cout << "Bitte geben Sie einen der angeführten Nummern ein" << std::endl;

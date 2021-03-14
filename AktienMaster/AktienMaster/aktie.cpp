@@ -19,6 +19,11 @@ void Aktie::printAktie() {
 
 }
 
+std::string Aktie::getName() {
+    return this->name;
+}
+
+
 void Aktie::printVector(int type) {
 
         vector<float> printIt;
