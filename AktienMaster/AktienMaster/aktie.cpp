@@ -23,6 +23,10 @@ std::string Aktie::getName() {
     return this->name;
 }
 
+std::string Aktie::getAbby() {
+    return this->abb;
+}
+
 
 void Aktie::printVector(int type) {
 

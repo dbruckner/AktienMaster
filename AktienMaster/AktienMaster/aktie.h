@@ -15,6 +15,7 @@ class Aktie {
         void addValue(int type, float value);
 
         std::string getName();
+        std::string getAbby();
 
     private:
         string name;
