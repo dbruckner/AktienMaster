@@ -10,6 +10,7 @@
 
 
 Aktie* hashtable[1009];
+Aktie* hashtableabb[1009];
 
 
 
@@ -64,7 +65,7 @@ int searchPos(std::string name) {
 		while (1) {
 			pos += (counter * counter);
 			pos %= PRIME;
-			if (hashtable[pos] != nullptr || hashtable[pos]->getName() == word) {
+			if (hashtable[pos] != nullptr && hashtable[pos]->getName() == word) {
 				return pos;
 			}
 			else if (counter == 1000) {
