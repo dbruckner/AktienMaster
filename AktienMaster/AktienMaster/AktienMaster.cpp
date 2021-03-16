@@ -9,8 +9,8 @@
 #define PRIME 1009;
 
 
-Aktie* hashtable[1009];
-Aktie* hashtableabb[1009];
+Aktie* hashtableNames[1009];
+Aktie* hashtableAbb[1009];
 
 
 
@@ -32,11 +32,11 @@ int hashFunc(std::string str, int n) {
 	return sum;
 }
 
-int calculatePos(std::string name) {
-	std::string word = name;
+int calculateHashPosition(std::string name, Aktie* hashtable[]) {
+	int pos = 0;
+	pos = hashFunc(name, name.length());
 
-	int pos = hashFunc(word, word.length());
-	pos %= PRIME;
+
 	if (hashtable[pos] != nullptr) {
 		int counter = 1;
 		while (1) {
@@ -46,45 +46,59 @@ int calculatePos(std::string name) {
 			if (hashtable[pos] == nullptr) {
 				break;
 			}
-			
+
 			counter++;
 		}
 	}
+
 	return pos;
+}
+
+void insertIntoHashtables(std::string name, std::string WKN ,std::string abb) {
+	Aktie* aktie = new Aktie(name, WKN, abb);
+
+	hashtableNames[calculateHashPosition(name, hashtableNames)] = aktie;
+	hashtableAbb[calculateHashPosition(abb, hashtableAbb)] = aktie;
 
 }
 
-int searchPos(std::string name) {
+
+int searchPos(std::string name, Aktie* hashtable[], int type) {
 	std::string word = name;
 	int pos = hashFunc(word, word.length());
-	pos %= PRIME;
 	int counter = 1;
-	if (hashtable[pos] != nullptr && hashtable[pos]->getName() == word) {
-		return pos;
-	}else {
-		while (1) {
-			pos += (counter * counter);
-			pos %= PRIME;
+		
+	while (1) {
+		if (type == 2) {
+			if (hashtable[pos] != nullptr && hashtable[pos]->getAbby() == word) {
+				return pos;
+			}
+		}else {
 			if (hashtable[pos] != nullptr && hashtable[pos]->getName() == word) {
 				return pos;
 			}
-			else if (counter == 1000) {
-				return -1;
-			}
-			
 		}
+		
+		pos += (counter * counter);
+		pos %= PRIME;
+			
 	}
-
 }
 
 
-int searchAktie() {
+
+
+int searchAktie(int type) {
 	std::string userinput = " ";
 
-	std::cout << "Geben Sie den Namen der Aktie ein die Sie suchen: ";
+	std::cout << "Geben Sie die Information der Aktie ein die Sie suchen: ";
 	std::cin >> userinput;
-
-	return searchPos(userinput);
+	if (type == 2) {
+		
+		return searchPos(userinput, hashtableAbb, type);
+	}else {
+		return searchPos(userinput, hashtableNames, type);
+	}
 }
 
 
@@ -116,6 +130,7 @@ void addAktie() {
 			break;
 		}
 	}
+
 	std::cout << "Geben Sie nun bitte zuletzt die abb der von Ihnen ausgewählten Firma an: ";
 	std::cin >> abb;
 	while (1) {
@@ -128,20 +143,16 @@ void addAktie() {
 		}
 	}
 
-	Aktie* aktie = new Aktie(name, to_string(WKN), abb);
-	hashtable[calculatePos(name)] = aktie;
-
+	insertIntoHashtables(name, to_string(WKN) ,abb);
 }
-
 
 
 int main() {
 
 	for (int i = 0; i < 1009; i++) {
-		hashtable[i] = nullptr;
+		hashtableNames[i] = nullptr;
+		hashtableAbb[i] = nullptr;
 	}
-	time_t t;
-	srand((unsigned)time(&t));
 
 	std::cout << "Willkommen im Aktienmaster Ihr persöhnliches Aktien Tool!" << std::endl;
 	int userinput;
@@ -153,11 +164,20 @@ int main() {
 			addAktie();
 		}
 		else if(userinput == 2) {
-			int pos = searchAktie();
-			if (pos != -1) {
-				hashtable[pos]->printAktie();
+			std::cout << "Wollen Sie nach dem Namen oder nach der Abb suchen? (1) nach dem Namen (2) nach der Abb" << std::endl;
+			int type = 0;
+			int pos = 0;
+			std::cin >> type;
+			if (type == 2) {
+				pos = searchAktie(type);
+			}else {
+				pos = searchAktie(type);
 			}
-			else {
+			if (pos != -1 && type == 1) {
+				hashtableNames[pos]->printAktie();
+			}else if(pos != -1 && type == 2){
+				hashtableAbb[pos]->printAktie();
+			}else {
 				std::cout << "Aktie kann nicht gefunden werden" << std::endl;
 			}
 		}
@@ -165,38 +185,4 @@ int main() {
 			std::cout << "Bitte geben Sie einen der angeführten Nummern ein" << std::endl;
 		}
 	}
-
-
-	//fillhashtable(1009);
-
-
-
-
-
-	/*
-	for (int i = 0; i < 1009; i++) {
-		if (hashtable[i] != "no") {
-			counter++;
-			std::cout << counter << ".) Slot " << i << " is " << hashtable[i] << std::endl;
-		}
-	}
-
-
-
-
-
-
-
-	Aktie test("TEST", "123", "TST");
-
-	test.addValue(high, 5.1);
-
-	test.printVector(high);
-
-	test.printAktie();
-	*/
-
-
-	//std::cout << hashFunc(key, key.length());
-
 }
