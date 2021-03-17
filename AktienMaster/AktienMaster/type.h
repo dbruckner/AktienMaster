@@ -2,7 +2,8 @@
 #define TYPE_H_INCLUDED
 
 enum type {
-    open = 1,
+    date,
+    open,
     high,
     low,
     close,
