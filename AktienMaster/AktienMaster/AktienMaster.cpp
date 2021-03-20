@@ -5,6 +5,8 @@
 #include <time.h>
 #include <fstream>
 #include <sstream>
+#include "pbplots/pbPlots.hpp"
+#include "pbplots/supportLib.hpp"
 #include "type.h"
 #include "aktie.h"
 
@@ -202,6 +204,41 @@ void importData(Aktie &inputAktie) {
 
 }
 
+void plotCurve(Aktie &inputAktie) {
+
+
+
+    RGBABitmapImageReference *imgRef = CreateRGBABitmapImageReference();
+
+    vector<double> x;
+    vector<double> y;
+
+    vector<double> data = inputAktie.getClose();
+    int len = data.size();
+
+
+    for(int i=len-30; i < len ; i++) {
+        x.push_back(len-i);
+        y.push_back(data.at(i));
+
+    }
+    cout<<x.size()<<endl;
+    cout<<y .size()<<endl;
+
+
+    DrawScatterPlot(imgRef, 600, 400, &x, &y);
+
+    vector<double> *pngData = ConvertToPNG(imgRef->image);
+
+    WriteToFile(pngData, "tmp.png");
+    DeleteImage(imgRef->image);
+
+
+
+
+
+}
+
 
 int main() {
 
@@ -248,7 +285,18 @@ int main() {
             cin >> kurzel;
             int pos = searchPos(kurzel, hashtableAbb, 2);
             importData(*hashtableAbb[pos]);
-            hashtableAbb[pos]->printVector(high);
+            //hashtableAbb[pos]->printVector(high);
+		}
+        else if(userinput == 4) {
+            string kurzel;
+            cout<<"Geben sie das Kurzel der Aktie an die Sie anzeigen mochten"<<endl;
+            cin >> kurzel;
+            int pos = searchPos(kurzel, hashtableAbb, 2);
+            plotCurve(*hashtableAbb[pos]);
+            //hashtableAbb[pos]->printVector(high);
+		}
+        else if(userinput == 0) {
+                break;
 		}
 		else {
 			std::cout << "Bitte geben Sie eine der angef�hrten Nummern ein" << std::endl;

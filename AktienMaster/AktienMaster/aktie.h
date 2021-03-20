@@ -13,23 +13,26 @@ class Aktie {
         void printAktie();
 
         void printVector(int type);
-        void addValue(int type, float value);
+        void addValue(int type, double value);
         void addDate(string date);
 
         std::string getName();
         std::string getAbby();
+
+        vector<double> getClose();
+        vector<string> getDate();
 
     private:
         string name;
         string WKN;
         string abb;
         vector<string> date;
-        vector<float> open;
-        vector<float> high;
-        vector<float> low;
-        vector<float> close;
-        vector<float> volume;
-        vector<float> adjClose;
+        vector<double> open;
+        vector<double> high;
+        vector<double> low;
+        vector<double> close;
+        vector<double> volume;
+        vector<double> adjClose;
 
 
 
