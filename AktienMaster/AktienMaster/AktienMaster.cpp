@@ -3,6 +3,8 @@
 #include <string>
 #include <string.h>
 #include <time.h>
+#include <fstream>
+#include <sstream>
 #include "type.h"
 #include "aktie.h"
 
@@ -71,7 +73,7 @@ int searchPos(std::string name, Aktie* hashtable[], int type) {
 	std::string word = name;
 	int pos = hashFunc(word, word.length());
 	int counter = 1;
-		
+
 	while (1) {
 		if (type == 2) {
 			if (hashtable[pos] != nullptr && hashtable[pos]->getAbby() == word) {
@@ -82,10 +84,10 @@ int searchPos(std::string name, Aktie* hashtable[], int type) {
 				return pos;
 			}
 		}
-		
+
 		pos += (counter * counter);
 		pos %= PRIME;
-			
+
 	}
 }
 
@@ -108,7 +110,7 @@ int searchAktie(int type) {
 	std::cout << "Geben Sie die Information der Aktie ein die Sie suchen: ";
 	std::cin >> userinput;
 	if (type == 2) {
-		
+
 		return searchPos(userinput, hashtableAbb, type);
 	}else {
 		return searchPos(userinput, hashtableNames, type);
@@ -145,7 +147,7 @@ void addAktie() {
 		}
 	}
 
-	std::cout << "Geben Sie nun bitte zuletzt die abb der von Ihnen ausgewählten Firma an: ";
+	std::cout << "Geben Sie nun bitte zuletzt die abb der von Ihnen ausgewï¿½hlten Firma an: ";
 	std::cin >> abb;
 	while (1) {
 		if (!cin) {
@@ -160,6 +162,46 @@ void addAktie() {
 	insertIntoHashtables(name, to_string(WKN) ,abb);
 }
 
+void importData(Aktie &inputAktie) {
+
+    string filename = inputAktie.getAbby() + ".csv";
+
+    ifstream input(filename);
+
+    string first;
+    string nextLine;
+    string nextValue;
+    double Value;
+
+    getline(input, first);
+
+
+    while(getline(input, nextLine)) {
+
+    int i = 0;
+
+        stringstream s(nextLine);
+        while(getline(s, nextValue, ',')) {
+
+        int n = (i%7);
+
+        if (n!=0) {
+            Value = stod(nextValue);
+            inputAktie.addValue(n, Value);
+        }
+        else {
+            inputAktie.addDate(nextValue);
+        }
+
+        i++;
+        }
+
+    }
+
+
+
+}
+
 
 int main() {
 
@@ -168,11 +210,16 @@ int main() {
 		hashtableAbb[i] = nullptr;
 	}
 
-	std::cout << "Willkommen im Aktienmaster Ihr persöhnliches Aktien Tool!" << std::endl;
+	std::cout << "Willkommen im Aktienmaster Ihr persï¿½hnliches Aktien Tool!" << std::endl;
 	int userinput;
 
 	while (1) {
-		std::cout << "Was wollen sie tun?" << std::endl << "(1) neue Aktien hinzufügen (2) einen Index suchen (3+) in Progress..: ";
+		cout << "Was wollen sie tun?" << endl
+        <<"(1) neue Aktien hinzufï¿½gen"<< endl
+        <<"(2) einen Index suchen" << endl
+        <<"(3) Kursdaten aus einer csv-Datei in eine Aktie Importieren" << endl
+        <<"(4) Kurve anzeigen"<<endl
+        <<"(5)...."<<endl;
 		std::cin >> userinput;
 		if (userinput == 1) {
 			addAktie();
@@ -195,8 +242,16 @@ int main() {
 				std::cout << "Aktie kann nicht gefunden werden" << std::endl;
 			}
 		}
+        else if(userinput == 3) {
+            string kurzel;
+            cout<<"Geben sie das Kurzel der Aktie an deren Werte Sie importieren mochten"<<endl;
+            cin >> kurzel;
+            int pos = searchPos(kurzel, hashtableAbb, 2);
+            importData(*hashtableAbb[pos]);
+            hashtableAbb[pos]->printVector(high);
+		}
 		else {
-			std::cout << "Bitte geben Sie einen der angeführten Nummern ein" << std::endl;
+			std::cout << "Bitte geben Sie eine der angefï¿½hrten Nummern ein" << std::endl;
 		}
 	}
 }

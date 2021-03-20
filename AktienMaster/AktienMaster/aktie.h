@@ -14,6 +14,7 @@ class Aktie {
 
         void printVector(int type);
         void addValue(int type, float value);
+        void addDate(string date);
 
         std::string getName();
         std::string getAbby();
@@ -39,3 +40,9 @@ class Aktie {
 #endif // AKTIE_H_INCLUDED
 
 
+#ifndef AKTIE_H_INCLUDED
+#define AKTIE_H_INCLUDED
+
+
+
+#endif // AKTIE_H_INCLUDED

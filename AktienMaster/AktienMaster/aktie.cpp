@@ -35,34 +35,45 @@ std::string Aktie::getAbby() {
 
 void Aktie::printVector(int type) {
 
-        vector<float> printIt;
+        vector<float> printFloat;
+
+        vector<string> printString;
 
         switch(type) {
+        case 0:
+            printString = this->date;
+            break;
         case 1:
-            printIt = this->open;
+            printFloat = this->open;
             break;
         case 2:
-            printIt = this->high;
+            printFloat = this->high;
             break;
         case 3:
-            printIt = this->low;
+            printFloat = this->low;
             break;
         case 4:
-            printIt = this->close;
+            printFloat = this->close;
             break;
         case 5:
-            printIt = this->volume;
+            printFloat = this->adjClose;
             break;
         case 6:
-            printIt = this->adjClose;
+            printFloat = this->volume;
             break;
         default:
 
             break;
         }
 
-        for (float x : printIt)
-        cout << x << " ";
+        if (type != 0) {
+            for (float x : printFloat)
+            cout << x << "\n";
+        }
+        else {
+            for (string x : printString)
+            cout << x << "\n";
+        }
 
 
 }
@@ -83,10 +94,10 @@ void Aktie::addValue(int type, float value) {
             this->close.push_back(value);
             break;
         case 5:
-            this->volume.push_back(value);
+            this->adjClose.push_back(value);
             break;
         case 6:
-            this->adjClose.push_back(value);
+            this->volume.push_back(value);
             break;
         default:
 
@@ -94,6 +105,13 @@ void Aktie::addValue(int type, float value) {
 
 
     }
+
+}
+
+void Aktie::addDate(string date) {
+
+    this->date.push_back(date);
+
 
 }
 
