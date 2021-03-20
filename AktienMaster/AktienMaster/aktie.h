@@ -8,6 +8,7 @@ using namespace std;
 class Aktie {
 
     public:
+        Aktie();
         Aktie(string name, string WKN, string abb);
         void printAktie();
 

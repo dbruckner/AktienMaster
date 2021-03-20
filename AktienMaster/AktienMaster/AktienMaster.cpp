@@ -43,7 +43,11 @@ int calculateHashPosition(std::string name, Aktie* hashtable[]) {
 			pos += (counter * counter);
 			pos %= PRIME;
 
-			if (hashtable[pos] == nullptr) {
+			if (hashtable[pos] == nullptr || hashtable[pos]->getName() == "deleted") {
+				if (hashtable[pos] != nullptr) {
+					hashtable[pos]->~Aktie();
+					hashtable[pos] = nullptr;
+				}
 				break;
 			}
 
@@ -85,7 +89,17 @@ int searchPos(std::string name, Aktie* hashtable[], int type) {
 	}
 }
 
+void deleteAktie(std::string name) {
+	Aktie* delaktie = new Aktie();
 
+	int posname = searchPos(name, hashtableNames, 1);
+	std::string abb = hashtableNames[posname]->getAbby();
+	int posabby = searchPos(abb, hashtableAbb, 2);
+
+	hashtableNames[posname]->~Aktie();
+	hashtableAbb[posabby] = delaktie;
+	hashtableNames[posname] = delaktie;
+}
 
 
 int searchAktie(int type) {

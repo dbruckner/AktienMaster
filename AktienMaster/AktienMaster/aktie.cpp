@@ -4,6 +4,11 @@
 using namespace std;
 
 
+Aktie::Aktie() {
+    this->name = "deleted";
+}
+
+
 Aktie::Aktie(string name, string WKN, string abb) {
 
     this->name = name;
