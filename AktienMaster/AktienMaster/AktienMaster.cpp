@@ -166,7 +166,7 @@ void addAktie() {
 
 void importData(Aktie &inputAktie) {
 
-    string filename = inputAktie.getAbby() + ".csv";
+    string filename = "CSV/"+ inputAktie.getAbby() + ".csv";
 
     ifstream input(filename);
 
@@ -230,11 +230,10 @@ void plotCurve(Aktie &inputAktie) {
 
     vector<double> *pngData = ConvertToPNG(imgRef->image);
 
-    WriteToFile(pngData, "tmp.png");
+    string filename = "plots/" + inputAktie.getAbby() + ".png";
+
+    WriteToFile(pngData, filename);
     DeleteImage(imgRef->image);
-
-
-
 
 
 }
