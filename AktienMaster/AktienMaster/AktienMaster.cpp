@@ -62,7 +62,7 @@ int calculateHashPosition(std::string name, Aktie* hashtable[]) {
 	return pos;
 }
 
-void insertIntoHashtables(std::string name, std::string WKN ,std::string abb) {
+void insertIntoHashtables(std::string name, std::string WKN, std::string abb) {
 	Aktie* aktie = new Aktie(name, WKN, abb);
 
 	hashtableNames[calculateHashPosition(name, hashtableNames)] = aktie;
@@ -81,7 +81,9 @@ int searchPos(std::string name, Aktie* hashtable[], int type) {
 			if (hashtable[pos] != nullptr && hashtable[pos]->getAbby() == word) {
 				return pos;
 			}
-		}else {
+		} else if (counter == 750) {
+			return -1;
+		} else {
 			if (hashtable[pos] != nullptr && hashtable[pos]->getName() == word) {
 				return pos;
 			}
@@ -89,7 +91,7 @@ int searchPos(std::string name, Aktie* hashtable[], int type) {
 
 		pos += (counter * counter);
 		pos %= PRIME;
-
+		counter++;
 	}
 }
 
@@ -97,12 +99,16 @@ void deleteAktie(std::string name) {
 	Aktie* delaktie = new Aktie();
 
 	int posname = searchPos(name, hashtableNames, 1);
-	std::string abb = hashtableNames[posname]->getAbby();
-	int posabby = searchPos(abb, hashtableAbb, 2);
+	if (posname == -1) {
+		std::cout << "Aktie wurde nicht gefunden" << std::endl;
+	} else {
+		std::string abb = hashtableNames[posname]->getAbby();
+		int posabby = searchPos(abb, hashtableAbb, 2);
 
-	hashtableNames[posname]->~Aktie();
-	hashtableAbb[posabby] = delaktie;
-	hashtableNames[posname] = delaktie;
+		hashtableNames[posname]->~Aktie();
+		hashtableAbb[posabby] = delaktie;
+		hashtableNames[posname] = delaktie;
+	}
 }
 
 
@@ -114,7 +120,7 @@ int searchAktie(int type) {
 	if (type == 2) {
 
 		return searchPos(userinput, hashtableAbb, type);
-	}else {
+	} else {
 		return searchPos(userinput, hashtableNames, type);
 	}
 }
@@ -131,8 +137,7 @@ void addAktie() {
 		if (!cin) {
 			std::cout << "Bitte geben Sie nur Buchstaben an: ";
 			std::cin >> name;
-		}
-		else {
+		} 		else {
 			break;
 		}
 	}
@@ -143,8 +148,7 @@ void addAktie() {
 		if (!cin) {
 			std::cout << "Bitte geben Sie nur Zahlen an: ";
 			std::cin >> WKN;
-		}
-		else {
+		} 		else {
 			break;
 		}
 	}
@@ -155,85 +159,83 @@ void addAktie() {
 		if (!cin) {
 			std::cout << "Bitte geben Sie nur Buchstaben an: ";
 			std::cin >> abb;
-		}
-		else {
+		} 		else {
 			break;
 		}
 	}
 
-	insertIntoHashtables(name, to_string(WKN) ,abb);
+	insertIntoHashtables(name, to_string(WKN), abb);
 }
 
-void importData(Aktie &inputAktie) {
+void importData(Aktie& inputAktie) {
 
-    string filename = "CSV/"+ inputAktie.getAbby() + ".csv";
+	string filename = "CSV/" + inputAktie.getAbby() + ".csv";
 
-    ifstream input(filename);
+	ifstream input(filename);
 
-    string first;
-    string nextLine;
-    string nextValue;
-    double Value;
+	string first;
+	string nextLine;
+	string nextValue;
+	double Value;
 
-    getline(input, first);
+	getline(input, first);
 
 
-    while(getline(input, nextLine)) {
+	while (getline(input, nextLine)) {
 
-    int i = 0;
+		int i = 0;
 
-        stringstream s(nextLine);
-        while(getline(s, nextValue, ',')) {
+		stringstream s(nextLine);
+		while (getline(s, nextValue, ',')) {
 
-        int n = (i%7);
+			int n = (i % 7);
 
-        if (n!=0) {
-            Value = stod(nextValue);
-            inputAktie.addValue(n, Value);
-        }
-        else {
-            inputAktie.addDate(nextValue);
-        }
+			if (n != 0) {
+				Value = stod(nextValue);
+				inputAktie.addValue(n, Value);
+			}         else {
+				inputAktie.addDate(nextValue);
+			}
 
-        i++;
-        }
+			i++;
+		}
 
-    }
+	}
 
 
 
 }
 
-void plotCurve(Aktie &inputAktie) {
+void plotCurve(Aktie& inputAktie) {
 
 
 
-    RGBABitmapImageReference *imgRef = CreateRGBABitmapImageReference();
+	RGBABitmapImageReference* imgRef = CreateRGBABitmapImageReference();
 
-    vector<double> x;
-    vector<double> y;
+	vector<double> x;
+	vector<double> y;
 
-    vector<double> data = inputAktie.getClose();
-    int len = data.size();
-
-
-    for(int i=len-30; i < len ; i++) {
-        x.push_back(len-i);
-        y.push_back(data.at(i));
-
-    }
-    cout<<x.size()<<endl;
-    cout<<y .size()<<endl;
+	vector<double> data = inputAktie.getClose();
+	int len = data.size();
 
 
-    DrawScatterPlot(imgRef, 600, 400, &x, &y);
+	for (int i = len - 30; i < len; i++) {
+		x.push_back(len - i);
+		y.push_back(data.at(i));
 
-    vector<double> *pngData = ConvertToPNG(imgRef->image);
+	}
+	cout << x.size() << endl;
+	cout << y.size() << endl;
 
-    string filename = "plots/" + inputAktie.getAbby() + ".png";
 
-    WriteToFile(pngData, filename);
-    DeleteImage(imgRef->image);
+	DrawScatterPlot(imgRef, 600, 400, &x, &y);
+
+	vector<double>* pngData = ConvertToPNG(imgRef->image);
+
+	string filename = "plots/" + inputAktie.getAbby() + ".png";
+
+	WriteToFile(pngData, filename);
+	DeleteImage(imgRef->image);
 
 
 }
@@ -246,58 +248,59 @@ int main() {
 		hashtableAbb[i] = nullptr;
 	}
 
-	std::cout << "Willkommen im Aktienmaster Ihr pers�hnliches Aktien Tool!" << std::endl;
+	std::cout << "Willkommen im Aktienmaster Ihr persoehnliches Aktien Tool!" << std::endl;
 	int userinput;
 
 	while (1) {
 		cout << "Was wollen sie tun?" << endl
-        <<"(1) neue Aktien hinzuf�gen"<< endl
-        <<"(2) einen Index suchen" << endl
-        <<"(3) Kursdaten aus einer csv-Datei in eine Aktie Importieren" << endl
-        <<"(4) Kurve anzeigen"<<endl
-        <<"(5)...."<<endl;
+			<< "(1) neue Aktien hinzufuegen" << endl
+			<< "(2) einen Index suchen" << endl
+			<< "(3) Kursdaten aus einer csv-Datei in eine Aktie Importieren" << endl
+			<< "(4) Kurve anzeigen" << endl
+			<< "(5) Aktie loeschen" << endl
+			<< "(6) ..." << endl;
 		std::cin >> userinput;
 		if (userinput == 1) {
 			addAktie();
-		}
-		else if(userinput == 2) {
+		}else if (userinput == 2) {
 			std::cout << "Wollen Sie nach dem Namen oder nach der Abb suchen? (1) nach dem Namen (2) nach der Abb" << std::endl;
 			int type = 0;
 			int pos = 0;
 			std::cin >> type;
 			if (type == 2) {
 				pos = searchAktie(type);
-			}else {
+			} else {
 				pos = searchAktie(type);
 			}
 			if (pos != -1 && type == 1) {
 				hashtableNames[pos]->printAktie();
-			}else if(pos != -1 && type == 2){
+			} else if (pos != -1 && type == 2) {
 				hashtableAbb[pos]->printAktie();
-			}else {
+			} else {
 				std::cout << "Aktie kann nicht gefunden werden" << std::endl;
 			}
-		}
-        else if(userinput == 3) {
-            string kurzel;
-            cout<<"Geben sie das Kurzel der Aktie an deren Werte Sie importieren mochten"<<endl;
-            cin >> kurzel;
-            int pos = searchPos(kurzel, hashtableAbb, 2);
-            importData(*hashtableAbb[pos]);
-            //hashtableAbb[pos]->printVector(high);
-		}
-        else if(userinput == 4) {
-            string kurzel;
-            cout<<"Geben sie das Kurzel der Aktie an die Sie anzeigen mochten"<<endl;
-            cin >> kurzel;
-            int pos = searchPos(kurzel, hashtableAbb, 2);
-            plotCurve(*hashtableAbb[pos]);
-            //hashtableAbb[pos]->printVector(high);
-		}
-        else if(userinput == 0) {
-                break;
-		}
-		else {
+		} else if (userinput == 3) {
+			string kurzel;
+			cout << "Geben sie das Kurzel der Aktie an deren Werte Sie importieren mochten" << endl;
+			cin >> kurzel;
+			int pos = searchPos(kurzel, hashtableAbb, 2);
+			importData(*hashtableAbb[pos]);
+			//hashtableAbb[pos]->printVector(high);
+		} else if (userinput == 4) {
+			string kurzel;
+			cout << "Geben sie das Kurzel der Aktie an die Sie anzeigen mochten" << endl;
+			cin >> kurzel;
+			int pos = searchPos(kurzel, hashtableAbb, 2);
+			plotCurve(*hashtableAbb[pos]);
+			//hashtableAbb[pos]->printVector(high);
+		} else if(userinput == 5){
+			std::cout << "Geben Sie den Namen der Aktie die Sie l�schen wollen";
+			std::string delname = " ";
+			std::cin >> delname;
+			deleteAktie(delname);
+		} else if (userinput == 0) {
+			break;
+		} else {
 			std::cout << "Bitte geben Sie eine der angef�hrten Nummern ein" << std::endl;
 		}
 	}
