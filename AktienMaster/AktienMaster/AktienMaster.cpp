@@ -373,7 +373,7 @@ int main(){
 			<< "(5) Aktie loeschen" << endl
 			<< "(6) Daten speichern" << endl
 			<< "(7) Daten laden" << endl
-			<< "(0) Progam beenden";
+			<< "(0) Progam beenden" << endl;
 		std::cin >> userinput;
 		if(userinput == 1){
 			addAktie();
@@ -409,7 +409,7 @@ int main(){
 			plotCurve(*hashtableAbb[pos]);
 			//hashtableAbb[pos]->printVector(high);
 		} else if(userinput == 5){
-			std::cout << "Geben Sie den Namen der Aktie die Sie l�schen wollen";
+			std::cout << "Geben Sie den Namen der Aktie die Sie l�schen wollen" << endl;
 			std::string delname = " ";
 			std::cin >> delname;
 			deleteAktie(delname);
