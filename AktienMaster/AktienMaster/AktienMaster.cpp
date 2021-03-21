@@ -46,9 +46,9 @@ int hashFunc(std::string str, int n){
 	int sum = 0;
 
 	for(int i = n - 1; i > 0; i--){
-		sum = (sum + str[n - i - 1] * power(31, i));
+		sum = (sum + str[n - i - 1] * power(31, i)) % PRIME;
 	}
-	sum %= PRIME;
+	
 
 	return sum;
 }
@@ -232,7 +232,10 @@ void addAktie(){
 		}
 	}
 
-	insertIntoHashtables(name, to_string(WKN), abb);
+	Aktie* ak = insertIntoHashtables(name, to_string(WKN), abb);
+
+	std::cout << ak->getName() << "was added to the database";
+
 }
 
 /*
