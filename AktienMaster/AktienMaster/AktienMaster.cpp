@@ -234,7 +234,7 @@ void addAktie(){
 
 	Aktie* ak = insertIntoHashtables(name, to_string(WKN), abb);
 
-	std::cout << ak->getName() << "was added to the database";
+	std::cout << ak->getName() << "was added to the database" std::endl;
 
 }
 
