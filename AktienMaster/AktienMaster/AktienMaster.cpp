@@ -323,7 +323,8 @@ int main() {
 			<< "(3) Kursdaten aus einer csv-Datei in eine Aktie Importieren" << endl
 			<< "(4) Kurve anzeigen" << endl
 			<< "(5) Aktie loeschen" << endl
-			<< "(6) ..." << endl;
+			<< "(6) Daten speichern" << endl
+			<< "(7) Daten laden" << endl;
 		std::cin >> userinput;
 		if (userinput == 1) {
 			addAktie();
