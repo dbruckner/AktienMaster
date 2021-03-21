@@ -28,6 +28,10 @@ std::string Aktie::getName() {
     return this->name;
 }
 
+std::string Aktie::getWKN() {
+    return this->WKN;
+}
+
 std::string Aktie::getAbby() {
     return this->abb;
 }
@@ -38,6 +42,34 @@ vector<double> Aktie::getClose() {
 
 vector<string> Aktie::getDate() {
     return this->date;
+}
+
+vector<double> Aktie::getVector(int type) {
+
+            switch(type) {
+        case 1:
+            return this->open;
+            break;
+        case 2:
+            return this->high;
+            break;
+        case 3:
+            return this->low;
+            break;
+        case 4:
+            return this->close;
+            break;
+        case 5:
+            return this->adjClose;
+            break;
+        case 6:
+            return this->volume;
+            break;
+        default:
+
+            break;
+        }
+
 }
 
 

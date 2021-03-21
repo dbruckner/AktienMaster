@@ -167,40 +167,58 @@ void addAktie() {
 	insertIntoHashtables(name, to_string(WKN), abb);
 }
 
-void importData(Aktie& inputAktie) {
+int getNumLines(string filename) {
 
-	string filename = "CSV/" + inputAktie.getAbby() + ".csv";
+    int numLines = 0;
+    string line;
 
-	ifstream input(filename);
+    ifstream input(filename);
 
-	string first;
-	string nextLine;
-	string nextValue;
-	double Value;
+    while(getline(input, line)) {
+        numLines++;
+    }
 
-	getline(input, first);
+    return numLines;
+}
 
+void importData(Aktie &inputAktie) {
 
-	while (getline(input, nextLine)) {
+    string filename = "CSV/"+ inputAktie.getAbby() + ".csv";
 
-		int i = 0;
+    ifstream input(filename);
 
-		stringstream s(nextLine);
-		while (getline(s, nextValue, ',')) {
+    int numLines = getNumLines(filename);
 
-			int n = (i % 7);
+    string uselessLine;
+    string nextLine;
+    string nextValue;
+    double Value;
 
-			if (n != 0) {
-				Value = stod(nextValue);
-				inputAktie.addValue(n, Value);
-			}         else {
-				inputAktie.addDate(nextValue);
-			}
+    for(int i= 0; i<numLines-30; i++) {
+        getline(input, uselessLine);
+    }
 
-			i++;
-		}
+    while(getline(input, nextLine)) {
 
-	}
+    int i = 0;
+
+        stringstream s(nextLine);
+        while(getline(s, nextValue, ',')) {
+
+        int n = (i%7);
+
+        if (n!=0) {
+            Value = stod(nextValue);
+            inputAktie.addValue(n, Value);
+        }
+        else {
+            inputAktie.addDate(nextValue);
+        }
+
+        i++;
+        }
+
+    }
 
 
 
@@ -236,6 +254,53 @@ void plotCurve(Aktie& inputAktie) {
 
 	WriteToFile(pngData, filename);
 	DeleteImage(imgRef->image);
+
+
+}
+
+void saveToFile() {
+
+    ofstream myfile;
+    myfile.open ("meineAktien.txt");
+
+    for (int i = 0; i < 1009; i++) {
+		if(hashtableNames[i] != nullptr) {
+         if(hashtableNames[i]->getName() != "deleted") {
+
+
+            string first = hashtableNames[i]->getName() + "," + hashtableNames[i]->getWKN() + "," + hashtableNames[i]->getAbby() + "\n";
+
+            vector<string> dateValues = hashtableNames[i]->getDate();
+            vector<double> openValues = hashtableNames[i]->getVector(open);
+            vector<double> highValues = hashtableNames[i]->getVector(high);
+            vector<double> lowValues = hashtableNames[i]->getVector(low);
+            vector<double> closeValues = hashtableNames[i]->getVector(close);
+            vector<double> adjCloseValues = hashtableNames[i]->getVector(adjClose);
+            vector<double> volumeValues = hashtableNames[i]->getVector(volume);
+
+            myfile<<first;
+
+            int len = dateValues.size();
+
+            for(int j = 0; j < len; j++) {
+                string dataLine = dateValues.at(j) + "," +
+                        to_string(openValues.at(j)) + "," +
+                        to_string(highValues.at(j)) + "," +
+                        to_string(lowValues.at(j)) + "," +
+                        to_string(closeValues.at(j)) + "," +
+                        to_string(adjCloseValues.at(j)) + "," +
+                        to_string(volumeValues.at(j)) + "\n";
+
+                myfile<<dataLine;
+            }
+
+            }
+
+		}
+	}
+	myfile.close();
+
+
 
 
 }
@@ -298,6 +363,8 @@ int main() {
 			std::string delname = " ";
 			std::cin >> delname;
 			deleteAktie(delname);
+		} else if(userinput == 6){
+			saveToFile();
 		} else if (userinput == 0) {
 			break;
 		} else {

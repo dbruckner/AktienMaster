@@ -17,10 +17,12 @@ class Aktie {
         void addDate(string date);
 
         std::string getName();
+        std::string getWKN();
         std::string getAbby();
 
         vector<double> getClose();
         vector<string> getDate();
+        vector<double> getVector(int type);
 
     private:
         string name;
