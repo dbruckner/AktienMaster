@@ -313,7 +313,7 @@ void loadDatabase(){
 void saveToFile(){
 
 	ofstream myfile;
-	myfile.open("database.txt");
+	myfile.open("CSV/database.txt");
 
 	for(int i = 0; i < 1009; i++){
 		if(hashtableNames[i] != nullptr){
