@@ -139,7 +139,7 @@ void addAktie(){
 	int WKN = 0;
 	std::string abb = " ";
 
-	std::cout << "Geben Sie bitte den Namen der Firma an: ";
+	std::cout << "Geben Sie bitte den Namen des Unternehmens an: ";
 	std::cin >> name;
 	while(1){
 		if(!cin){
@@ -161,7 +161,7 @@ void addAktie(){
 		}
 	}
 
-	std::cout << "Geben Sie nun bitte zuletzt die abb der von Ihnen ausgew�hlten Firma an: ";
+	std::cout << "Geben Sie bitte zuletzt das Kurzel des Unternehmens an: ";
 	std::cin >> abb;
 	while(1){
 		if(!cin){
@@ -276,8 +276,7 @@ void plotCurve(Aktie& inputAktie){
 		y.push_back(data.at(i));
 
 	}
-	cout << x.size() << endl;
-	cout << y.size() << endl;
+
 
 
 	DrawScatterPlot(imgRef, 600, 400, &x, &y);
@@ -403,7 +402,7 @@ int main(){
 		hashtableAbb[i] = nullptr;
 	}
 
-	std::cout << "Willkommen im Aktienmaster Ihr persoehnliches Aktien Tool!" << std::endl;
+	std::cout << "Willkommen im Aktienmaster Ihrem persoenlichen Aktien Tool!" << std::endl;
 	int userinput;
 
 	while(1){
@@ -420,7 +419,7 @@ int main(){
 		if(userinput == 1){
 			addAktie();
 		} else if(userinput == 2){
-			std::cout << "Wollen Sie nach dem Namen oder nach der Abb suchen? (1) nach dem Namen (2) nach der Abb" << std::endl;
+			std::cout << "Wollen Sie nach dem Namen(1) oder nach dem Kuerzel(2) suchen?" << std::endl;
 			int type = 0;
 			int pos = 0;
 			std::cin >> type;
@@ -438,27 +437,32 @@ int main(){
 			}
 		} else if(userinput == 3){
 			string kurzel;
-			cout << "Geben sie das Kurzel der Aktie an deren Werte Sie importieren mochten" << endl;
+			cout << "Geben sie das Kuerzel der Aktie an deren Werte Sie importieren mochten" << endl;
 			cin >> kurzel;
 			int pos = searchPos(kurzel, hashtableAbb, 2);
 			importData(*hashtableAbb[pos]);
+			cout<<"Daten aus "<<kurzel<<".csv importiert"<<endl;
 			
 		} else if(userinput == 4){
 			string kurzel;
-			cout << "Geben sie das Kurzel der Aktie an die Sie anzeigen mochten" << endl;
+			cout << "Geben sie das Kuerzel der Aktie an die Sie anzeigen mochten" << endl;
 			cin >> kurzel;
 			int pos = searchPos(kurzel, hashtableAbb, 2);
 			plotCurve(*hashtableAbb[pos]);
+			cout<<"Schlusskurse in "<<kurzel<<".png dargestellt"<<endl;
 			
 		} else if(userinput == 5){
-			std::cout << "Geben Sie die Abkuerzung der Aktie die Sie loeschen wollen" << endl;
+			std::cout << "Geben Sie das Kuerzel der Aktie die Sie loeschen wollen" << endl;
 			std::string delname = " ";
 			std::cin >> delname;
 			deleteAktie(delname);
+			cout<<"Aktie geloescht"<<endl;
 		} else if(userinput == 6){
 			saveToFile();
+			cout<<"Daten gespeichert"<<endl;
 		} else if(userinput == 7){
 			loadDatabase();
+			cout<<"Daten geladen"<<endl;
 		} else if(userinput == 0){
 			for(int i = 0; i < 1009; i++){
 				if(hashtableNames[i] != nullptr){
@@ -467,7 +471,7 @@ int main(){
 			}
 			break;
 		} else{
-			std::cout << "Bitte geben Sie eine der angef�hrten Nummern ein" << std::endl;
+			std::cout << "Bitte geben Sie eine der angegebenen Zahlen ein" << std::endl;
 		}
 	}
 }
