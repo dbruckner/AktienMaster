@@ -210,9 +210,13 @@ void importData(Aktie& inputAktie){
 			int n = (i % 7);
 
 			if(n != 0){
-				Value = stod(nextValue);
+				if (nextValue == "null") {
+					Value = 0;
+				}else {
+					Value = stod(nextValue);
+				}
 				inputAktie.addValue(n, Value);
-			}         else{
+			}else{
 				inputAktie.addDate(nextValue);
 			}
 
