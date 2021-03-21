@@ -31,16 +31,37 @@ int power(int base, int exponent){
 	return base * power(base, exponent - 1);
 }
 
+/*
+* This function creates the hashvalue based on the word 
+* 
+* @param str	Word to which the hashvalue is caclulated
+* @param n		length of the word
+* 
+* @return sum	returns the completed hashvalue 
+*/
+
+
 int hashFunc(std::string str, int n){
 
 	int sum = 0;
 
 	for(int i = n - 1; i > 0; i--){
-		sum = (sum + str[n - i - 1] * power(31, i)) % PRIME;
+		sum = (sum + str[n - i - 1] * power(31, i));
 	}
+	sum %= PRIME;
 
 	return sum;
 }
+
+/*
+* Function that calculates the next free position of the hashtables based on the hashvalue
+* 
+* @param name		name or abb of the stock  
+* @param hashtable	the hashtable that is looked at
+* 
+* @return pos		the posisition of the stock in the hashtable
+*/
+
 
 int calculateHashPosition(std::string name, Aktie* hashtable[]){
 	int pos = 0;
@@ -68,6 +89,18 @@ int calculateHashPosition(std::string name, Aktie* hashtable[]){
 	return pos;
 }
 
+
+/*
+* function that is called when a new stock is added to the hashtable, it creates a new stock object and calls functions to add them to the hashtable
+* 
+* @param name	name of the stock
+* @param wkn	wkn-number of the stock
+* @param abb	abbriviation of the stock
+* 
+* @return aktie	the object of the class
+* 
+*/
+
 Aktie* insertIntoHashtables(std::string name, std::string WKN, std::string abb){
 	Aktie* aktie = new Aktie(name, WKN, abb);
 
@@ -76,6 +109,16 @@ Aktie* insertIntoHashtables(std::string name, std::string WKN, std::string abb){
 	return aktie;
 }
 
+/*
+* this function calculates the position of a searched stock
+* 
+* @param name		name of the stock 
+* @param hashtable	the hashtable that searched
+* @param type		if the stock is searched with the name or the abbriviation
+* 
+* @return pos		the position of the stock in the hashtable
+* 
+*/
 
 int searchPos(std::string name, Aktie* hashtable[], int type){
 	std::string word = name;
@@ -103,6 +146,12 @@ int searchPos(std::string name, Aktie* hashtable[], int type){
 	}
 }
 
+/*
+* This function gets the position based on the abb of the stock
+* 
+* @param abb	abb of the stock
+*/
+
 void deleteAktie(std::string abb){
 	Aktie* delaktie = new Aktie();
 
@@ -119,6 +168,14 @@ void deleteAktie(std::string abb){
 	}
 }
 
+/*
+* gets the input of the stock from the the user and calls the search functions
+* 
+* @param type			differates if the stock should be searched by name(1) or by abb(2) 
+* 
+* @return seachpos()	the position returned by searchpos()
+*/
+
 
 int searchAktie(int type){
 	std::string userinput = " ";
@@ -133,6 +190,9 @@ int searchAktie(int type){
 	}
 }
 
+/*
+* gets the inputs from the user for a new stock and calls the functions needed to complete said task
+*/
 
 void addAktie(){
 	std::string name = " ";
