@@ -421,7 +421,6 @@ int main(){
 			for(int i = 0; i < 1009; i++){
 				if(hashtableNames[i] != nullptr){
 					hashtableNames[i]->~Aktie();
-					hashtableNames[i] = nullptr;
 				}
 			}
 			break;
