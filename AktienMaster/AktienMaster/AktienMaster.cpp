@@ -80,8 +80,10 @@ int searchPos(std::string name, Aktie* hashtable[], int type){
 		if(type == 2){
 			if(hashtable[pos] != nullptr && hashtable[pos]->getAbby() == word){
 				return pos;
+			} else if(counter == 1010){
+				return -1;
 			}
-		} else if(counter == 750){
+		} else if(counter == 1010){
 			return -1;
 		} else{
 			if(hashtable[pos] != nullptr && hashtable[pos]->getName() == word){
@@ -95,17 +97,17 @@ int searchPos(std::string name, Aktie* hashtable[], int type){
 	}
 }
 
-void deleteAktie(std::string name){
+void deleteAktie(std::string abb){
 	Aktie* delaktie = new Aktie();
 
-	int posname = searchPos(name, hashtableNames, 1);
+	int posname = searchPos(abb, hashtableAbb, 2);
 	if(posname == -1){
 		std::cout << "Aktie wurde nicht gefunden" << std::endl;
 	} else{
-		std::string abb = hashtableNames[posname]->getAbby();
-		int posabby = searchPos(abb, hashtableAbb, 2);
+		std::string name = hashtableAbb[posname]->getName();
+		int posabby = searchPos(name, hashtableNames, 1);
 
-		hashtableNames[posname]->~Aktie();
+		hashtableAbb[posname]->~Aktie();
 		hashtableAbb[posabby] = delaktie;
 		hashtableNames[posname] = delaktie;
 	}
@@ -400,16 +402,16 @@ int main(){
 			cin >> kurzel;
 			int pos = searchPos(kurzel, hashtableAbb, 2);
 			importData(*hashtableAbb[pos]);
-			//hashtableAbb[pos]->printVector(high);
+			
 		} else if(userinput == 4){
 			string kurzel;
 			cout << "Geben sie das Kurzel der Aktie an die Sie anzeigen mochten" << endl;
 			cin >> kurzel;
 			int pos = searchPos(kurzel, hashtableAbb, 2);
 			plotCurve(*hashtableAbb[pos]);
-			//hashtableAbb[pos]->printVector(high);
+			
 		} else if(userinput == 5){
-			std::cout << "Geben Sie den Namen der Aktie die Sie l�schen wollen" << endl;
+			std::cout << "Geben Sie die Abkuerzung der Aktie die Sie loeschen wollen" << endl;
 			std::string delname = " ";
 			std::cin >> delname;
 			deleteAktie(delname);
