@@ -175,6 +175,14 @@ void addAktie(){
 	insertIntoHashtables(name, to_string(WKN), abb);
 }
 
+/*
+* Function to calcualte the number of lines in a given file   
+* 
+* @param string filename	the name of the file
+* 
+* @return int numLines		the number lines in the file
+*/
+
 int getNumLines(string filename){
 
 	int numLines = 0;
@@ -188,6 +196,14 @@ int getNumLines(string filename){
 
 	return numLines;
 }
+
+/*
+* Function to fill an Aktie object with data from a file   
+* 
+* @param Aktie& inputAktie	reference to an Aktie object
+* 
+*/
+
 
 void importData(Aktie& inputAktie){
 
@@ -234,6 +250,13 @@ void importData(Aktie& inputAktie){
 
 
 }
+
+/*
+* Function to plot the data of an Aktie object in png-file  
+* 
+* @param Aktie& inputAktie	reference to an Aktie object
+* 
+*/
 
 void plotCurve(Aktie& inputAktie){
 
@@ -321,6 +344,9 @@ void loadDatabase(){
 	}
 }
 
+/*
+* Function to save the data from the generated hash-table in a .txtfile 
+*/
 
 void saveToFile(){
 
@@ -364,6 +390,10 @@ void saveToFile(){
 	}
 	myfile.close();
 }
+
+/*
+* Main funtion dispalys a menu and calls other functions based on user input
+*/
 
 
 int main(){
