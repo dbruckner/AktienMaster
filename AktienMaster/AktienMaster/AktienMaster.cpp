@@ -418,6 +418,12 @@ int main(){
 		} else if(userinput == 7){
 			loadDatabase();
 		} else if(userinput == 0){
+			for(int i = 0; i < 1009; i++){
+				if(hashtableNames[i] != nullptr){
+					hashtableNames[i]->~Aktie();
+					hashtableNames[i] = nullptr;
+				}
+			}
 			break;
 		} else{
 			std::cout << "Bitte geben Sie eine der angef�hrten Nummern ein" << std::endl;
