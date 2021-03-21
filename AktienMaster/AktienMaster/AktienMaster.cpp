@@ -12,11 +12,17 @@
 
 #define PRIME 1009;
 
-
 Aktie* hashtableNames[1009];
 Aktie* hashtableAbb[1009];
 
-
+/*
+* Function to calcualte the power of a value of a number that is given   
+* 
+* @param base		the base of the calcuation
+* @param exponent	the exponent the calcualtion
+* 
+* @return sum		the calcualted value
+*/
 
 int power(int base, int exponent){
 	if(exponent == 0){
