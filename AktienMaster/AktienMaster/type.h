@@ -7,8 +7,9 @@ enum type {
     high,
     low,
     close,
-    volume,
-    adjClose
+    adjClose,
+    volume
+    
 
 };
 
